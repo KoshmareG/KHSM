@@ -16,6 +16,10 @@ RSpec.describe GameQuestion, type: :model do
     it '#answer_correct?' do
       expect(game_question.answer_correct?('b')).to be_truthy
     end
+
+    it '#correct_answer_key' do
+      expect(game_question.correct_answer_key).to eq('b')
+    end
   end
 
   context 'user helpers' do
