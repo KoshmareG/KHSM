@@ -3,7 +3,6 @@ require 'support/my_spec_helper'
 
 RSpec.describe Game, type: :model do
   let(:user) { FactoryBot.create(:user) }
-
   let(:game_w_questions) { FactoryBot.create(:game_with_questions, user: user) }
 
   context 'Game Factory' do
@@ -86,12 +85,14 @@ RSpec.describe Game, type: :model do
     end
   end
 
-  context 'game conditions' do
-    it '#current_game_question' do
+  describe '#current_game_question' do
+    it 'returns first qustion' do
       expect(game_w_questions.current_game_question).to eq(game_w_questions.game_questions.first)
     end
+  end
 
-    it '#previous_level' do
+  describe '#previous_level' do
+    it 'returns -1 level' do
       expect(game_w_questions.previous_level).to eq(-1)
     end
   end
