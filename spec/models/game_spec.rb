@@ -92,8 +92,67 @@ RSpec.describe Game, type: :model do
   end
 
   describe '#previous_level' do
-    it 'returns -1 level' do
+    it 'returns previous level' do
       expect(game_w_questions.previous_level).to eq(-1)
+    end
+  end
+
+  describe '#answer_current_question!' do
+    context 'correct answer' do
+      let(:correct_answer) { game_w_questions.current_game_question.correct_answer_key }
+
+      it 'returns true' do
+        expect(game_w_questions.answer_current_question!(correct_answer)).to be_truthy
+      end
+
+      it 'returns next level' do
+        game_w_questions.answer_current_question!(correct_answer)
+
+        expect(game_w_questions.current_level).to eq(1)
+      end
+    end
+
+    context 'wrong answer' do
+      let(:wrong_answer) {%w[a b c d].grep_v(game_w_questions.current_game_question.correct_answer_key).sample}
+
+      it 'returns false' do
+        expect(game_w_questions.answer_current_question!(wrong_answer)).to be_falsey
+      end
+
+      it 'returns true' do
+        game_w_questions.answer_current_question!(wrong_answer)
+
+        expect(game_w_questions.finished?).to be_truthy
+      end
+    end
+
+    context 'correct answer for last question' do
+      before do
+        game_w_questions.current_level = Question::QUESTION_LEVELS.max
+        correct_answer = game_w_questions.current_game_question.correct_answer_key
+        expect(game_w_questions.answer_current_question!(correct_answer)).to be_truthy
+      end
+
+      it 'returns true' do
+        expect(game_w_questions.finished?).to be_truthy
+      end
+
+      it 'returns :won' do
+        expect(game_w_questions.status).to eq(:won)
+      end
+
+      it 'returns previous level' do
+        expect(user.balance).to eq(prize = Game::PRIZES[game_w_questions.previous_level])
+      end
+    end
+
+    context 'timeout' do
+      it 'returns false' do
+        game_w_questions.created_at = 1.hour.ago
+        correct_answer = game_w_questions.current_game_question.correct_answer_key
+
+        expect(game_w_questions.answer_current_question!(correct_answer)).to be_falsey
+      end
     end
   end
 end
