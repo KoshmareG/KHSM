@@ -7,20 +7,40 @@ RSpec.describe GamesController, type: :controller do
   let(:game_w_questions) { FactoryBot.create(:game_with_questions, user: user) }
 
   context 'Anon' do
-    it 'kick from #show' do
-      get :show, id: game_w_questions.id
-
+    def redirect_to_new_session
       expect(response.status).not_to eq(200)
       expect(response).to redirect_to(new_user_session_path)
       expect(flash[:alert]).to be
     end
 
+    it 'kick from #show' do
+      get :show, id: game_w_questions.id
+
+      redirect_to_new_session
+    end
+
     it 'kick from #create' do
       expect { post :create }.to change(Game, :count).by(0)
 
-      expect(response.status).not_to eq(200)
-      expect(response).to redirect_to(new_user_session_path)
-      expect(flash[:alert]).to be
+      redirect_to_new_session
+    end
+
+    it 'kick from #answer' do
+      put :answer, id: game_w_questions.id, letter: 'b'
+
+      redirect_to_new_session
+    end
+
+    it 'kick from #take_money' do
+      put :take_money, id: game_w_questions.id
+
+      redirect_to_new_session
+    end
+
+    it 'kick from #help' do
+      put :help, id: game_w_questions.id
+
+      redirect_to_new_session
     end
   end
 
