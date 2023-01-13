@@ -53,7 +53,7 @@ RSpec.describe GamesController, type: :controller do
       post :create
       game = assigns(:game)
 
-      expect(game.finished?).to be_falsey
+      expect(game).not_to be_finished
       expect(game.user).to eq(user)
       expect(response).to redirect_to(game_path(game))
       expect(flash[:notice]).to be
@@ -63,7 +63,7 @@ RSpec.describe GamesController, type: :controller do
       get :show, id: game_w_questions.id
       game = assigns(:game)
 
-      expect(game.finished?).to be_falsey
+      expect(game).not_to be_finished
       expect(game.user).to eq(user)
 
       expect(response.status).to eq(200)
@@ -74,7 +74,7 @@ RSpec.describe GamesController, type: :controller do
       put :answer, id: game_w_questions.id, letter: game_w_questions.current_game_question.correct_answer_key
       game = assigns(:game)
 
-      expect(game.finished?).to be_falsey
+      expect(game).not_to be_finished
       expect(game.current_level).to be > 0
       expect(response).to redirect_to(game_path(game))
       expect(flash.empty?).to be_truthy
@@ -87,7 +87,7 @@ RSpec.describe GamesController, type: :controller do
       put :help, id: game_w_questions.id, help_type: :audience_help
       game = assigns(:game)
 
-      expect(game.finished?).to be_falsey
+      expect(game).not_to be_finished
       expect(game.audience_help_used).to be_truthy
       expect(game.current_game_question.help_hash[:audience_help]).to be
       expect(game.current_game_question.help_hash[:audience_help].keys).to contain_exactly('a', 'b', 'c', 'd')
@@ -111,7 +111,7 @@ RSpec.describe GamesController, type: :controller do
       put :take_money, id: game_w_questions.id
       game = assigns(:game)
 
-      expect(game.finished?).to be_truthy
+      expect(game).to be_finished
       expect(game.status).to eq(:money)
       expect(game.prize).to eq(prize)
       expect(response).to redirect_to(user_path(user))
@@ -122,7 +122,7 @@ RSpec.describe GamesController, type: :controller do
     end
 
     it 'redirect to in progress game when creating new' do
-      expect(game_w_questions.finished?).to be_falsey
+      expect(game_w_questions).not_to be_finished
 
       expect { post :create }.to change(Game, :count).by(0)
       game = assigns(:game)
