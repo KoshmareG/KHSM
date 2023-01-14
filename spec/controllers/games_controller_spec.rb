@@ -6,21 +6,25 @@ RSpec.describe GamesController, type: :controller do
   let(:admin) { FactoryBot.create(:user, is_admin: true) }
   let(:game_w_questions) { FactoryBot.create(:game_with_questions, user: user) }
 
+  shared_examples 'anonymous cant gaming' do
+    it 'returns status not to 200' do
+      expect(response.status).not_to eq(200)
+    end
+
+    it 'redirect to new user session' do
+      expect(response).to redirect_to(new_user_session_path)
+    end
+
+    it 'returns flash alert' do
+      expect(flash[:alert]).to be
+    end
+  end
+
   describe '#show' do
     context 'when anonymous' do
       before { get :show, id: game_w_questions.id }
 
-      it 'returns status not to 200' do
-        expect(response.status).not_to eq(200)
-      end
-
-      it 'redirect to new user session' do
-        expect(response).to redirect_to(new_user_session_path)
-      end
-
-      it 'returns flash alert' do
-        expect(flash[:alert]).to be
-      end
+      include_examples 'anonymous cant gaming'
     end
 
     context 'when signed in user' do
@@ -53,17 +57,7 @@ RSpec.describe GamesController, type: :controller do
     context 'when anonymous' do
       before { expect { post :create }.to change(Game, :count).by(0) }
 
-      it 'returns status not to 200' do
-        expect(response.status).not_to eq(200)
-      end
-
-      it 'redirect to new user session' do
-        expect(response).to redirect_to(new_user_session_path)
-      end
-
-      it 'returns flash alert' do
-        expect(flash[:alert]).to be
-      end
+      include_examples 'anonymous cant gaming'
     end
 
     context 'when signed in user' do
@@ -97,17 +91,7 @@ RSpec.describe GamesController, type: :controller do
     context 'when anonymous' do
       before { put :answer, id: game_w_questions.id, letter: game_w_questions.current_game_question.correct_answer_key }
 
-      it 'returns status not to 200' do
-        expect(response.status).not_to eq(200)
-      end
-
-      it 'redirect to new user session' do
-        expect(response).to redirect_to(new_user_session_path)
-      end
-
-      it 'returns flash alert' do
-        expect(flash[:alert]).to be
-      end
+      include_examples 'anonymous cant gaming'
     end
 
     context 'signed in user giving correct answer' do
@@ -162,17 +146,7 @@ RSpec.describe GamesController, type: :controller do
     context 'when anonymous' do
       before { put :take_money, id: game_w_questions.id }
 
-      it 'returns status not to 200' do
-        expect(response.status).not_to eq(200)
-      end
-
-      it 'redirect to new user session' do
-        expect(response).to redirect_to(new_user_session_path)
-      end
-
-      it 'returns flash alert' do
-        expect(flash[:alert]).to be
-      end
+      include_examples 'anonymous cant gaming'
     end
 
     context 'when signed in user' do
@@ -216,17 +190,7 @@ RSpec.describe GamesController, type: :controller do
     context 'when anonymous' do
       before { put :help, id: game_w_questions.id }
 
-      it 'returns status not to 200' do
-        expect(response.status).not_to eq(200)
-      end
-
-      it 'redirect to new user session' do
-        expect(response).to redirect_to(new_user_session_path)
-      end
-
-      it 'returns flash alert' do
-        expect(flash[:alert]).to be
-      end
+      include_examples 'anonymous cant gaming'
     end
 
     context 'signed in user uses audience help' do
