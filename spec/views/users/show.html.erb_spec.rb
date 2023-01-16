@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe 'users/show', type: :view do
-  let(:user) { FactoryBot.create(:user, name: 'TestUser') }
+  let(:user) { create(:user, name: 'TestUser') }
 
   context 'authorized user' do
     before do
-      assign(:games, [FactoryBot.build_stubbed(:game, finished_at: '2023-01-10 10:00:00', current_level: 2, prize: 100)])
+      assign(:games, [build_stubbed(:game, finished_at: '2023-01-10 10:00:00', current_level: 2, prize: 100)])
       assign(:user, user)
       sign_in user
 
