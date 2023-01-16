@@ -118,8 +118,8 @@ RSpec.describe GameQuestion, type: :model do
       expect(game_question.help_hash).to include(:friend_call)
     end
 
-    it 'returns string' do
-      expect(game_question.help_hash[:friend_call]).to be_an_instance_of(String)
+    it 'returns string with answer variant' do
+      expect(game_question.help_hash[:friend_call]).to match(/(A|B|C|D)\z/)
     end
   end
 end
