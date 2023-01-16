@@ -35,25 +35,44 @@ RSpec.describe GameQuestion, type: :model do
   end
 
   describe '#help_hash' do
-    context 'uses fifty fifty' do
-      before do
-        expect(game_question.help_hash).not_to include(:fifty_fifty)
-        game_question.add_fifty_fifty
-      end
-
-      it 'returns help hash with fifty fifty' do
-        expect(game_question.help_hash).to include(:fifty_fifty)
-      end
-
-      it 'returns correct varians count' do
-        expect(game_question.help_hash[:fifty_fifty].size).to eq(2)
-      end
-
-      it 'includes correct answer' do
-        expect(game_question.help_hash[:fifty_fifty]).to include(game_question.correct_answer_key)
-      end
+    before do
+      expect(game_question.help_hash).to be_empty
+      game_question.help_hash[:test_key] = 'test_string'
     end
 
+    it 'returns not empty hesh' do
+      expect(game_question.help_hash).not_to be_empty
+    end
+
+    it 'returns hesh with correct key' do
+      expect(game_question.help_hash).to include(:test_key)
+    end
+
+    it 'returns correct string' do
+      expect(game_question.help_hash[:test_key]).to eq('test_string')
+    end
+  end
+
+  describe '#add_fifty_fifty' do
+    before do
+      expect(game_question.help_hash).not_to include(:fifty_fifty)
+      game_question.add_fifty_fifty
+    end
+
+    it 'returns help hash with fifty fifty' do
+      expect(game_question.help_hash).to include(:fifty_fifty)
+    end
+
+    it 'returns correct varians count' do
+      expect(game_question.help_hash[:fifty_fifty].size).to eq(2)
+    end
+
+    it 'includes correct answer' do
+      expect(game_question.help_hash[:fifty_fifty]).to include(game_question.correct_answer_key)
+    end
+  end
+
+  describe '#add_audience_help' do
     context 'uses audience help' do
       before do
         expect(game_question.help_hash).not_to include(:audience_help)
@@ -87,20 +106,20 @@ RSpec.describe GameQuestion, type: :model do
         expect(game_question.help_hash[:audience_help].keys).to include(game_question.correct_answer_key)
       end
     end
+  end
 
-    context 'uses friend call' do
-      before do
-        expect(game_question.help_hash).not_to include(:friend_call)
-        game_question.add_friend_call
-      end
+  describe '#add_friend_call' do
+    before do
+      expect(game_question.help_hash).not_to include(:friend_call)
+      game_question.add_friend_call
+    end
 
-      it 'returns help hash with friend call' do
-        expect(game_question.help_hash).to include(:friend_call)
-      end
+    it 'returns help hash with friend call' do
+      expect(game_question.help_hash).to include(:friend_call)
+    end
 
-      it 'returns string' do
-        expect(game_question.help_hash[:friend_call]).to be_an_instance_of(String)
-      end
+    it 'returns string' do
+      expect(game_question.help_hash[:friend_call]).to be_an_instance_of(String)
     end
   end
 end
