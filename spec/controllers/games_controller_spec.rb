@@ -251,7 +251,7 @@ RSpec.describe GamesController, type: :controller do
       end
     end
 
-    context 'signed in user uses fifty fifty' do
+    context 'signed in user uses friend call' do
       let(:game) { assigns(:game) }
 
       before do
