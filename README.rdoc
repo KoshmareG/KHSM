@@ -1,7 +1,20 @@
-== Кто хочет стать миллионером?!
+# KHSM
 
-Игра для детей от 12 до 159 лет.
+The famous TV game Who Wants to Be a Millionaire? on Ruby on Rails from the [Goodprogrammer](http://goodprogrammer.ru) course.
 
-Учебное приложение курса по Ruby on Rails от «Хорошего программиста». В продакшене настроено на работу с Heroku.
+The application was created on Ruby 2.5.0 and Ruby on Rails 4.2.6. SQLite3 is used as a database.
 
-© http://goodprogrammer.ru
+Before starting the app, run the following commands:
+
+```
+$ bundle
+$ bundle exec rake db:create
+$ bundle exec rake db:migrate
+$ bundle exec rake db:seed
+```
+
+Run the application:
+
+```
+$ bundle exec rake s
+```
